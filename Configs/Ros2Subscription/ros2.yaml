@@ -1,0 +1,29 @@
+ros2: &ros2
+  name: ros2
+  connector: Ros2
+  scan_interval: !!int 1000
+  message_libraries:
+    - ./Configs/Ros2cs-ros2-sensor_msgs.dll
+    - ./Configs/Ros2cs-clearpathrobotics-clearpath_msgs.dll
+  items:
+    - name: Chatter
+      type: Ros2cs.Messages.Std.String, DIME
+      address: /chatter
+      script: |
+        print(result)
+        return result.Data
+    - name: EmergencyStop
+      type: Ros2cs.Messages.Std.Bool, DIME
+      address: /A300_XXXXX/platform/emergency_stop
+      script: return result
+    - name: BatteryStatus
+      enabled: !!bool true
+      type: Ros2cs.Messages.Sensor.BatteryState, Ros2cs-ros2-sensor_msgs
+      address: /A300_XXXXX/platform/bms/status
+      script: return result
+    - name: MotorStatus
+      enabled: !!bool false
+      type: Ros2cs.Messages.ClearpathMotor.LynxMultiStatus, Ros2cs-clearpathrobotics-clearpath_msgs
+      address: /A300_XXXXX/platform/motors/status
+      script: return result
+      

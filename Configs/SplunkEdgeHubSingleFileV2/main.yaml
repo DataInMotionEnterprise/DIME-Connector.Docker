@@ -1,0 +1,96 @@
+# SOURCES
+eipSource1: &eipSource1
+  name: eipSource1
+  enabled: !!bool false
+  scan_interval: !!int 1000
+  connector: EthernetIP
+  rbe: !!bool true
+  type: ControlLogix
+  address: 192.168.3.2
+  path: 1,0
+  log: !!int 0
+  timeout: !!int 1000
+  bypass_ping: !!bool true
+  ignore_errors_on_read: !!bool true
+  items:
+    - name: Pump13/Running
+      enabled: !!bool true
+      type: bool
+      address: PRODUCTPUMPS[13].I.RUNNING
+    - name: Pump13/Name
+      enabled: !!bool true
+      type: string
+      address: PRODUCTPUMPS[13].NAME
+    - name: Pump13/Fault
+      enabled: !!bool true
+      type: bool
+      address: PRODUCTPUMPS[13].O.FAULT
+    - name: Pump13/HourTotal
+      enabled: !!bool true
+      type: int
+      address: PRODUCTPUMPS[13].O.HOUR_TOTAL
+  exclude_filter:
+    - /\$SYSTEM
+
+scriptSource1: &scriptSource1
+  name: scriptSource1
+  enabled: !!bool true
+  scan_interval: !!int 60000
+  connector: Script
+  rbe: !!bool true
+  init_script: |
+    print('[Lua] HELLO SPLUNK!');
+    counter = 0
+  items:
+    - name: counter
+      enabled: !!bool true
+      rbe: !!bool true
+      script: |
+        counter = counter + 1
+        print('[Lua] Counter = ' .. counter)
+        return counter
+  exclude_filter:
+    - /\$SYSTEM
+
+# SINKS
+consoleSink1: &consoleSink1
+  name: consoleSink1
+  enabled: !!bool true
+  scan_interval: !!int 1000
+  connector: Console
+  exclude_filter:
+    - /\$SYSTEM
+
+httpServerSink1: &httpServerSink1
+  name: httpServerSink1
+  enabled: !!bool true
+  scan_interval: !!int 1000
+  connector: HTTPServer
+  uri: http://*:8080/
+  exclude_filter:
+    - /\$SYSTEM
+
+splunkEhSdkSink1: &splunkEhSdkSink1
+  name: splunkEhSdkSink1
+  enabled: !!bool true
+  scan_interval: !!int 1000
+  connector: SplunkEhSDK2
+  address: http://host.docker.internal
+  port: !!int 50051
+  topic: dime/dev
+  exclude_filter:
+    - /\$SYSTEM
+
+# APP CONFIG
+app:
+  license: 0000-0000-0000-0000-0000-0000-0000-0000
+  ring_buffer: !!int 4096
+  http_server_uri: http://0.0.0.0:9999/
+  ws_server_uri: ws://0.0.0.0:9998/
+sinks:
+  - *consoleSink1
+  - *httpServerSink1
+  - *splunkEhSdkSink1
+sources:
+  - *eipSource1
+  - *scriptSource1

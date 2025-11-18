@@ -1,0 +1,6 @@
+console: &console
+  name: console
+  connector: Console
+  scan_interval: !!int 1000
+  exclude_filter:
+    - /\$SYSTEM
