@@ -83,6 +83,8 @@ docker run \
 
 [Splunk OTI Documentation](https://help.splunk.com/en/data-management/splunk-ot-intelligence/set-up-splunk-ot-intelligence/4.12/use-splunk-ot-intelligence/deploy-and-configure-docker-containers-in-splunk-ot-intelligence)
 
+[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
+
 JSON Configuration  
 
 ```json
@@ -92,11 +94,11 @@ JSON Configuration
 }
 ```
 
-[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
-
 ### Edge Hub Deployment
 
 [Splunk Edge Hub Documentation](https://help.splunk.com/en/splunk-cloud-platform/ot-intelligence/administer-splunk-edge-hub-os/2.0/configure-advanced-settings/use-docker-containers-with-splunk-edge-hub-os)
+
+[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
 
 Use the pre-built Splunk tarball.  
 
@@ -105,5 +107,3 @@ VERSION=3.0.0
 
 https://github.com/DataInMotionEnterprise/DIME-Releases/releases/download/connector-${VERSION}/dime-connector-splunk-${VERSION}.tar
 ```
-
-[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
