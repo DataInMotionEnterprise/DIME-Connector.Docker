@@ -85,6 +85,8 @@ docker run \
 
 [Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
 
+Use the general `datainmotionenterprise/connector:latest` image.
+
 JSON Configuration  
 
 ```json
