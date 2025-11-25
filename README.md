@@ -18,10 +18,10 @@ mkdir -p volumes/dime/connector/python
 mkdir -p volumes/dime/connector/logs
 
 # copy artifacts
-cp DIME-Connector.Docker/nlog.config volumes/dime/connector/nlog.config
-cp -r DIME-Connector.Docker/Lua/* volumes/dime/connector/lua
-cp -r DIME-Connector.Docker/Python/* volumes/dime/connector/python
-cp -r DIME-Connector.Docker/Configs/${CONFIG}/* volumes/dime/connector/configs
+cp DIME-Connector.Docker/Generic/nlog.config volumes/dime/connector/nlog.config
+cp -r DIME-Connector.Docker/Generic/Lua/* volumes/dime/connector/lua
+cp -r DIME-Connector.Docker/Generic/Python/* volumes/dime/connector/python
+cp -r DIME-Connector.Docker/Generic/Configs/${CONFIG}/* volumes/dime/connector/configs
 
 # run container
 docker run \
@@ -58,10 +58,10 @@ mkdir -p volumes/dime/connector/python
 mkdir -p volumes/dime/connector/logs
 
 # copy artifacts
-cp DIME-Connector.Docker/nlog.config volumes/dime/connector/nlog.config
-cp -r DIME-Connector.Docker/Lua/* volumes/dime/connector/lua
-cp -r DIME-Connector.Docker/Python/* volumes/dime/connector/python
-cp -r DIME-Connector.Docker/Configs/${CONFIG}/* volumes/dime/connector/configs
+cp DIME-Connector.Docker/Generic/nlog.config volumes/dime/connector/nlog.config
+cp -r DIME-Connector.Docker/Generic/Lua/* volumes/dime/connector/lua
+cp -r DIME-Connector.Docker/Generic/Python/* volumes/dime/connector/python
+cp -r DIME-Connector.Docker/Generic/Configs/${CONFIG}/* volumes/dime/connector/configs
 
 # run container
 docker run \
@@ -83,7 +83,9 @@ docker run \
 
 [Splunk OTI Documentation](https://help.splunk.com/en/data-management/splunk-ot-intelligence/set-up-splunk-ot-intelligence/4.12/use-splunk-ot-intelligence/deploy-and-configure-docker-containers-in-splunk-ot-intelligence)
 
-[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
+[Example DIME Configuration](./Splunk/Configs/SplunkEdgeHubSingleFileV2/main.yaml)
+
+[Detailed Instructions](./Splunk/README.md#oti-deployment)
 
 Use the general `datainmotionenterprise/connector:latest` image.
 
@@ -100,7 +102,9 @@ JSON Configuration
 
 [Splunk Edge Hub Documentation](https://help.splunk.com/en/splunk-cloud-platform/ot-intelligence/administer-splunk-edge-hub-os/2.0/configure-advanced-settings/use-docker-containers-with-splunk-edge-hub-os)
 
-[Example DIME Configuration](./Configs/SplunkEdgeHubSingleFileV2/main.yaml)
+[Example DIME Configuration](./Splunk/Configs/SplunkEdgeHubSingleFileV2/main.yaml)
+
+[Detailed Instructions](./Splunk/README.md#edge-hub-deployment)
 
 Use the pre-built Splunk tarball.  
 
