@@ -1,7 +1,7 @@
 # DIME-Connector.Docker
 Running DIME Connector in Docker
 
-# General
+## General
 
 ```sh
 CONFIG=Basic
