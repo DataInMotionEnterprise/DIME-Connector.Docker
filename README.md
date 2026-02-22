@@ -45,6 +45,7 @@ docker run \
 
 ```sh
 CONFIG=Ros2Subscription
+ROSVERSION=jazzy
 
 cd ~
 
@@ -74,7 +75,7 @@ docker run \
    --ipc host \
    --pid host \
    --rm \
-   datainmotionenterprise/connector:latest-ros2
+   datainmotionenterprise/connector:latest-ros2-${ROSVERSION}
 ```
 
 ## Splunk Edge Hub
