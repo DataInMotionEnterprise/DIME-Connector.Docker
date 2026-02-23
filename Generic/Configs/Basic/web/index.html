@@ -84,14 +84,54 @@
     <script>
         // --- Configuration ---
         var MAX_ROWS = 200;
+        var LIST_PORT = 8080;
         var DATA_WS_PORT = 8092;
         var ADMIN_WS_PORT = 9998;
 
-        // --- Data WebSocket (streamed connector data) ---
+        // --- Data table ---
         var dataBody = document.getElementById('data-body');
         var dataDot = document.getElementById('data-dot');
         var dataStatusEl = document.getElementById('data-status');
         var firstDataMsg = true;
+
+        function addDataRow(path, data, timestampMs, flash) {
+            if (firstDataMsg) {
+                dataBody.innerHTML = '';
+                firstDataMsg = false;
+            }
+            var tr = document.createElement('tr');
+            var ts = timestampMs ? new Date(timestampMs).toLocaleTimeString() : '';
+            var val = (typeof data === 'object' && data !== null) ? JSON.stringify(data) : String(data);
+            tr.innerHTML = '<td>' + ts + '</td><td class="mono">' + path + '</td><td class="mono">' + val + '</td>';
+            if (flash) tr.className = 'flash';
+            if (dataBody.firstChild) {
+                dataBody.insertBefore(tr, dataBody.firstChild);
+            } else {
+                dataBody.appendChild(tr);
+            }
+            while (dataBody.children.length > MAX_ROWS) {
+                dataBody.removeChild(dataBody.lastChild);
+            }
+        }
+
+        // --- Fetch initial snapshot from /list, then start WebSocket ---
+        function fetchListThenConnect() {
+            var host = window.location.hostname || 'localhost';
+            fetch('http://' + host + ':' + LIST_PORT + '/list')
+                .then(function(r) { return r.json(); })
+                .then(function(items) {
+                    // Sort oldest first so newest end up at top after insert
+                    items.sort(function(a, b) { return a.Timestamp - b.Timestamp; });
+                    for (var i = 0; i < items.length; i++) {
+                        addDataRow(items[i].Path, items[i].Data, items[i].Timestamp, false);
+                    }
+                    connectDataWs();
+                })
+                .catch(function() {
+                    // If /list fails, just start WS directly
+                    connectDataWs();
+                });
+        }
 
         function connectDataWs() {
             var host = window.location.hostname || 'localhost';
@@ -117,30 +157,7 @@
                 try {
                     var msg = JSON.parse(evt.data);
                     if (!msg.Path) return;
-                    // Clear placeholder on first message
-                    if (firstDataMsg) {
-                        dataBody.innerHTML = '';
-                        firstDataMsg = false;
-                    }
-
-                    var tr = document.createElement('tr');
-                    var ts = msg.Timestamp ? new Date(msg.Timestamp * 1000).toLocaleTimeString() : '';
-                    var val = (typeof msg.Data === 'object' && msg.Data !== null) ? JSON.stringify(msg.Data) : String(msg.Data);
-
-                    tr.innerHTML = '<td>' + ts + '</td><td class="mono">' + msg.Path + '</td><td class="mono">' + val + '</td>';
-                    tr.className = 'flash';
-
-                    // Insert at top
-                    if (dataBody.firstChild) {
-                        dataBody.insertBefore(tr, dataBody.firstChild);
-                    } else {
-                        dataBody.appendChild(tr);
-                    }
-
-                    // Trim old rows
-                    while (dataBody.children.length > MAX_ROWS) {
-                        dataBody.removeChild(dataBody.lastChild);
-                    }
+                    addDataRow(msg.Path, msg.Data, msg.Timestamp, true);
                 } catch (e) {
                     // ignore parse errors
                 }
@@ -216,8 +233,8 @@
             statsBody.innerHTML = html;
         }
 
-        // --- Start connections ---
-        connectDataWs();
+        // --- Start: fetch snapshot first, then stream ---
+        fetchListThenConnect();
         connectAdminWs();
     </script>
 </body>
